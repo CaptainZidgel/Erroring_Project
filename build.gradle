@@ -14,8 +14,8 @@ repositories {
     jcenter()
     mavenLocal()
 
-    //maven { url "https://dl.bintray.com/mipt-npm/dataforge" }
-    //maven { url "https://dl.bintray.com/mipt-npm/scientifik" }
+    maven { url "https://dl.bintray.com/mipt-npm/dataforge" }   //I am not actually sure that you need these
+    maven { url "https://dl.bintray.com/mipt-npm/scientifik" }  //but the example project includes them
     maven { url "https://dl.bintray.com/mipt-npm/kscience" }
 }
 
@@ -27,6 +27,12 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.7"
 
     implementation 'kscience.plotlykt:plotlykt-core:0.2.0'
+
+    /*
+    JAVASCRIPT DEPENDENCY:
+    Place https://raw.githubusercontent.com/plotly/plotly.js/master/dist/plotly-basic.js in
+    \build\js\packages\PACKAGE_NAME (for me its KotlinSpot) \kotlin-dce\plotly.js\dist
+    */
 }
 
 kotlin.target.browser { }

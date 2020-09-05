@@ -10,6 +10,9 @@ import kotlinx.serialization.json.*
 import org.w3c.dom.HTMLElement
 import kotlin.js.Date
 
+import kscience.plotly.plot
+import kscience.plotly.scatter
+
 suspend fun getBigList(ids: bundleID) {
     window.fetch("https://logs.tf/api/v1/log?player=${ids.steam64}&limit=10000")
             .then { Response -> Response.text() }
@@ -39,12 +42,7 @@ fun parseBigList(data: String, earliest: Date = Date(2000, 0, 1), latest: Date =
         }
         dateIndexed.sortBy{ it.first }
         val (indexes, values) = expandingMean(dateIndexed)
-        val element =
-                document.getElementById("plot") as? HTMLElement ?: error("Element with id 'plot' not found on page")
-        println("Plotting has infihedm akellgely")
-        println("$indexes $values")
     }
-
 }
 
 var playerIDs: bundleID? = null
@@ -62,6 +60,14 @@ suspend fun main() {
             val list = getBigList(playerIDs!!)
         }
     })
+    val element =
+        document.getElementById("plot") as? HTMLElement ?: error("Element with id 'plot' not found on page")
+    element.plot {
+        scatter {
+            x(1, 2, 3, 4)
+            y(2, 4, 6, 8)
+        }
+    }
 }
 
 //https://medium.com/@nieldw/observing-rate-limits-with-coroutines-in-koltin-clients-73c7e0067d69
