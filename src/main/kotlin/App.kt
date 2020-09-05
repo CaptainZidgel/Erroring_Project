@@ -1,11 +1,12 @@
-import kotlinx.browser.document
-import kotlinx.browser.window
+import kotlin.browser.document //kotlin.browser is deprecated 1.4 onwards... use kotlinx.browser
+import kotlin.browser.window
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLInputElement
 import kotlinx.coroutines.*
 import kotlinx.coroutines.async
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+//import kotlinx.serialization.decodeFromString //In Kotlin 1.4, use Json{options}.decodeFromString<Object>(data)
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 import org.w3c.dom.HTMLElement
 import kotlin.js.Date
 
@@ -17,7 +18,8 @@ suspend fun getBigList(ids: bundleID) {
 
 //Earliest and latest - inclusive time windows for logs to include. Months indexed at 0, for some reason.
 fun parseBigList(data: String, earliest: Date = Date(2000, 0, 1), latest: Date = Date(2040, 11, 1)) {
-    val json = Json{ignoreUnknownKeys = true}.decodeFromString<LogList>(data)
+    //val json = Json{ignoreUnknownKeys = true}.decodeFromString<LogList>(data) //1.4
+    val json = Json(JsonConfiguration(ignoreUnknownKeys = true)).parse(LogList.serializer(), data)
     var dateIndexed: MutableList<Pair<String, Number>> = mutableListOf()
     GlobalScope.launch {
         val stat = "dpm"
@@ -40,6 +42,7 @@ fun parseBigList(data: String, earliest: Date = Date(2000, 0, 1), latest: Date =
         val element =
                 document.getElementById("plot") as? HTMLElement ?: error("Element with id 'plot' not found on page")
         println("Plotting has infihedm akellgely")
+        println("$indexes $values")
     }
 
 }
@@ -65,7 +68,7 @@ suspend fun main() {
 private suspend fun <T> observeRateLimitAsync(onePerMillis: Long, block: () -> T): Deferred<T> = withContext(Dispatchers.Default) {
     launch {
         delay(onePerMillis)
-        println("Rate limit observed: 1 request per $onePerMillis ms")
+        //println("Rate limit observed: 1 request per $onePerMillis ms")
     }
 
     async {

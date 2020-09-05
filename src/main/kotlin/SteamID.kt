@@ -56,7 +56,7 @@ fun toSteam64(S: String): String {
 //my use of private setters and try/catch inside init is overcomplicated but I wanted to keep this class "safe"
 data class bundleID(
     val starter: String,
-    val universe: Int = 1,
+    val universe: Int = 1
 ) {
     var steam64: String = ""
         private set

@@ -1,5 +1,6 @@
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 
 //These are mutable public variables in case you want to modify them for special processing. Perhaps you want to include whacky old 6s koth maps like coalplant.
 public var sixes_koth = setOf("product", "clearcut", "bagel")
@@ -158,11 +159,11 @@ data class LogList(
 
 var biglist = LogList(false,-9, -9, arrayOf())
 fun getBigList(msg: String, url: String) {
-    biglist = Json{ignoreUnknownKeys = true}.decodeFromString<LogList>(msg)
+    biglist = Json(JsonConfiguration(ignoreUnknownKeys = true)).parse(LogList.serializer(), msg)
 }
 
 fun parseLogFromRequest(msg: String, id: Int): Log {
-    val result = Json{ignoreUnknownKeys = true}.decodeFromString<Log>(msg)
+    val result = Json(JsonConfiguration(ignoreUnknownKeys = true)).parse(Log.serializer(), msg)
     //result.id = Regex("log/(\\d+)").find(url)!!.groupValues[1].toInt()
     result.id = id
     return result
